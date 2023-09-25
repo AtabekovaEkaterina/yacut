@@ -1,5 +1,10 @@
 import os
 
+MAX_LEN_FOR_SHORT_LINK = 16
+MAX_LEN_FOR_ORIGINAL_LINK = 256
+NUMBER_OF_CHARACTERS_TO_GENERATE_SHORT_LINK = 6
+VALID_NAME_FOR_SHORT_LINK = '[0-9a-zA-Z]+$'
+
 
 class Config(object):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', default='sqlite:///db.sqlite3')

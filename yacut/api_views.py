@@ -1,11 +1,13 @@
+from http import HTTPStatus
 import re
 
 from flask import jsonify, request
 
+from settings import MAX_LEN_FOR_SHORT_LINK, VALID_NAME_FOR_SHORT_LINK
 from yacut import app, db
 from yacut.error_handlers import InvalidAPIUsage
 from yacut.models import URLMap
-from yacut.views import get_unique_short_id
+from yacut.utils import get_unique_short_id
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -22,8 +24,8 @@ def add_urlmap():
             f'Имя "{data["custom_id"]}" уже занято.'
         )
     if (
-        len(data['custom_id']) > 16 or
-        not re.compile('[0-9a-zA-Z]+$').match(data['custom_id'])
+        len(data['custom_id']) > MAX_LEN_FOR_SHORT_LINK or
+        not re.compile(VALID_NAME_FOR_SHORT_LINK).match(data['custom_id'])
     ):
         raise InvalidAPIUsage(
             'Указано недопустимое имя для короткой ссылки'
@@ -32,12 +34,12 @@ def add_urlmap():
     urlmap.from_dict(data)
     db.session.add(urlmap)
     db.session.commit()
-    return jsonify(urlmap.to_dict()), 201
+    return jsonify(urlmap.to_dict()), HTTPStatus.CREATED
 
 
 @app.route('/api/id/<string:short_id>/', methods=['GET'])
 def get_urlmap(short_id):
     urlmap = URLMap.query.filter_by(short=short_id).first()
     if not urlmap:
-        raise InvalidAPIUsage('Указанный id не найден', 404)
-    return jsonify({'url': urlmap.original}), 200
+        raise InvalidAPIUsage('Указанный id не найден', HTTPStatus.NOT_FOUND)
+    return jsonify({'url': urlmap.original}), HTTPStatus.OK
