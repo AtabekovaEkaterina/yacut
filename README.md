@@ -124,7 +124,7 @@ flask run
 
 - MAX_LEN_FOR_SHORT_LINK - максимальная длина короткой ссылки
 - MAX_LEN_FOR_ORIGINAL_LINK - максимальная длина оригинальной ссылки
-- NUMBER_OF_CHARACTERS_TO_GENERATE_SHORT_LINK - количество символов для генирации короткой ссылки
+- NUMBER_OF_CHARACTERS_TO_GENERATE_SHORT_LINK - количество символов для генерации короткой ссылки
 - VALID_NAME_FOR_SHORT_LINK - допустимые символы для короткой ссылки
 
 
